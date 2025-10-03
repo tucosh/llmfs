@@ -44,7 +44,8 @@ class LayerNormalization(tf.keras.layers.Layer):
         super().build(input_shape)
 
     def call(self, inputs, axis=-1, epsilon=1e-5):
-        mean, variance = tf.nn.moments(inputs, axis, keep_dims=True)
+        # mean, variance = tf.nn.moments(inputs, axis, keep_dims=True)
+        mean, variance = tf.nn.moments(inputs, axis, keepdims=True)
         rdev = tf.math.rsqrt(variance + epsilon)
         x = (inputs - mean) * rdev
         output = x * self.gamma + self.beta
