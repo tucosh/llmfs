@@ -6,8 +6,8 @@ class Embedding(tf.Module):
     def __init__(self, embedding_size, vocab_size, max_position_length=None, name=None):
         super().__init__(name=name)
         self.max_position_length = max_position_length
-        self.word_embedding = tf.Variable(tf.zeros([vocab_size, embedding_size]), name = 'word_embedding')
-        self.position_embedding = tf.Variable(tf.ones([max_position_length, embedding_size]), name = 'position_embedding') # , dtype=tf.dtypes.int32'
+        self.word_embedding = tf.Variable(tf.random.normal([vocab_size, embedding_size]), name = 'word_embedding')
+        self.position_embedding = tf.Variable(tf.random.normal([max_position_length, embedding_size]), name = 'position_embedding') # , dtype=tf.dtypes.int32'
         self.debug = False
     def __call__(self, inputs):
         if self.debug:
@@ -42,7 +42,7 @@ class Dense(tf.Module):
         self.activation = activation
         if d_in and d_out:
             self.w = tf.Variable(tf.random.normal([d_in, d_out]), name = 'w')
-            self.b = tf.Variable(tf.zeros([d_out]), name = 'b')
+            self.b = tf.Variable(tf.random.normal([d_out]), name = 'b')
     def __call__(self, x):
         y = tf.matmul(x, self.w) + self.b
         if self.activation:

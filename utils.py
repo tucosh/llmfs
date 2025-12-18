@@ -4,7 +4,8 @@ import gc
 import sys
 import numpy as np
 import tensorflow as tf
-import tiktoken
+# import tiktoken
+from transformers import GPT2Tokenizer
 import os
 import urllib.request
 from tqdm import tqdm
@@ -123,7 +124,8 @@ def generate_text_simple(model, idx, max_new_tokens, context_size):
         # print("idx               after concat:", idx)
     return idx
 
-tokenizer = tiktoken.get_encoding("gpt2")
+# tokenizer = tiktoken.get_encoding("gpt2")
+tokenizer =GPT2Tokenizer.from_pretrained('gpt2')
 
 def text_to_token_ids(text, tokenizer=tokenizer):
     encoded = tokenizer.encode(text, allowed_special={'<|endoftext|>'})
@@ -132,10 +134,16 @@ def text_to_token_ids(text, tokenizer=tokenizer):
     encoded_tensor = tf.expand_dims(encoded_tensor, axis=0)
     return encoded_tensor
 
-def token_ids_to_text(token_ids, tokenizer=tokenizer):
+# def token_ids_to_text(token_ids, tokenizer=tokenizer):
+#     # flat = token_ids.squeeze(0) # remove batch dimension
+#     # return tokenizer.decode(flat.tolist())
+#     return tokenizer.decode(token_ids[-1])
+
+
+def token_ids_to_text(token_ids, tokenizer=GPT2Tokenizer.from_pretrained('gpt2')):
     # flat = token_ids.squeeze(0) # remove batch dimension
     # return tokenizer.decode(flat.tolist())
-    return tokenizer.decode(token_ids[-1])
+    return tokenizer.decode(token_ids)
 
 def download_file(url, destination, backup_url=None):
     def _attempt_download(download_url):
